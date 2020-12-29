@@ -122,6 +122,7 @@ DROP TABLE [dbo].[QuestionOptions]
 GO
 CREATE TABLE [dbo].[QuestionOptions](
 	[QuestionOptionsId] [int]  IDENTITY(1,1) NOT NULL,
+	[QuestionId] [int] NOT NULL,
 	[SlNo] [int] NOT NULL,
 	[Option] [nvarchar](1000) NOT NULL,
 	[IsCorrect] [int] NOT NULL,
@@ -178,8 +179,8 @@ CREATE TABLE [dbo].[ExamCandidateAttempt](
 	[CandidatePhone] [nvarchar](12) NULL,
 	[AttemptDate] [Date] NULL,
 	[CompleteAttempt] bit NULL,
-	[StartTime] [time] NULL,
-	[EndTime] [time] NULL,
+	[StartTime] [datetime] NULL,
+	[EndTime] [datetime] NULL,
 	[TotalScore] [int] NULL,
 	[GainScore] [int] NULL,
 	[PercentageScore] [int] NULL,
@@ -195,9 +196,9 @@ CREATE TABLE [dbo].[ExamCandidateAttemptQuestions](
 	[ExamCandidateAttemptId] [int] NOT NULL,
 	[SeqNo] [int] NOT NULL,
 	[QuestionId] [int] NOT NULL,
-	[IsAnswerCorrect] [char](1) NOT NULL,
-	[GainScore] [int] NOT NULL,
-	[AttemptTime] [time] NOT NULL,
+	[IsAnswerCorrect] [char](1) NULL,
+	[GainScore] [int] NULL,
+	[AttemptTime] [datetime] NULL,
 ) ON [PRIMARY]
 GO
 
