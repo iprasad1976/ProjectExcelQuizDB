@@ -155,7 +155,8 @@ CREATE TABLE [dbo].[ExamCandidate](
 	[ExamCandidateId] [int]  IDENTITY(1,1) NOT NULL,
 	[ExamId] [int] NOT NULL,
 	[CandidateLoginId] [int] NOT NULL,
-	[NoofAttempt] [int] NOT NULL,
+	[TotalNoofAttempts] [int] NOT NULL,
+	[NoofAttempted] [int] NOT NULL,
 	[CreatedBy] [nvarchar](20) NOT NULL,
 	[CreatedDate] [datetime] NOT NULL,
 	[ModifiedBy] [nvarchar](20) NOT NULL,
@@ -176,6 +177,7 @@ CREATE TABLE [dbo].[ExamCandidateAttempt](
 	[CandidateEmailId] [nvarchar](250) NULL,
 	[CandidatePhone] [nvarchar](12) NULL,
 	[AttemptDate] [Date] NULL,
+	[CompleteAttempt] bit NULL,
 	[StartTime] [time] NULL,
 	[EndTime] [time] NULL,
 	[TotalScore] [int] NULL,
@@ -183,6 +185,7 @@ CREATE TABLE [dbo].[ExamCandidateAttempt](
 	[PercentageScore] [int] NULL,
 ) ON [PRIMARY]
 GO
+
 
 IF OBJECT_ID('dbo.ExamCandidateAttemptQuestions', 'U') IS NOT NULL 
 DROP TABLE [dbo].[ExamCandidateAttemptQuestions]
