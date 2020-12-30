@@ -173,7 +173,7 @@ CREATE TABLE [dbo].[ExamCandidateAttempt](
 	[ExamCandidateAttemptId] [int]  IDENTITY(1,1) NOT NULL,
 	[Token] varchar(50) NOT NULL,
 	[ExamId] [int] NOT NULL,
-	[CandidateId] [int] NOT NULL,
+	[CandidateLoginId] [int] NOT NULL,
 	[CandidateName] [nvarchar](100) NULL,
 	[CandidateEmailId] [nvarchar](250) NULL,
 	[CandidatePhone] [nvarchar](12) NULL,
