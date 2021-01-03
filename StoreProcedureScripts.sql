@@ -5,6 +5,7 @@ GO
 
 -- This SP is used to login screen for Candidate
 --EXEC GetCandidateToken 'Test', 'Test'
+--Candidate controller --Done
 
 CREATE OR ALTER PROC GetCandidateToken
 (
@@ -13,24 +14,24 @@ CREATE OR ALTER PROC GetCandidateToken
 )
 AS
 BEGIN
-	DECLARE @candidateLoginId int = 0
-	DECLARE @token varchar(50) = ''
-	SELECT @candidateLoginId = CandidateLoginId FROM CandidateLogin  WHERE UserId = @userId AND Password = @password AND IsActive = 'Y'
+   DECLARE @candidateLoginId int = 0
+   DECLARE @token varchar(50) = ''
+   SELECT @candidateLoginId = CandidateLoginId FROM CandidateLogin  WHERE UserId = @userId AND Password = @password AND IsActive = 'Y'
    IF @candidateLoginId > 0
    BEGIN
 		SET @token = newid() 
 		DECLARE @dt datetime = getdate()
 
-		INSERT INTO CandidateLoginToken (CandidateLoginId, Token, LoginStartTime, LoginEndTime) values (@candidateLoginId, @token, @dt, DATEADD(d, 1, @dt))
+		INSERT INTO CandidateLoginToken (CandidateLoginId, Token, LoginStartTime, LoginEndTime) values (@candidateLoginId, @token, @dt, DATEADD(HOUR, 8, @dt))
 	END	
 	
-	SELECT @token
+	SELECT @token AS Token, @dt As LoginStart, DATEADD(HOUR, 8, @dt) As LoginEnd
 END
 
 GO
 
 
-
+--Candidate controller 
 -- This SP is used to Get list of assigned exam for Candiate
 CREATE OR ALTER PROC GetListExam(@userId nvarchar(20))
 AS
@@ -46,6 +47,7 @@ END
 
 GO
 
+--Candidate controller
 -- This SP is used to Get list of assigned exam for Candiate
 CREATE OR ALTER PROC GetCandidateExamInfo(@examId int, @userId nvarchar(20))
 AS
@@ -61,6 +63,7 @@ END
 
 GO
 
+--Candidate controller
 -- This SP is used to Get list of assigned exam for Candidate
 CREATE OR ALTER PROC CandidateExamStart(@examId int, @userId nvarchar(20), @token varchar(50), @candidateName nvarchar(100), @candidateEmailId nvarchar(250), @candidatePhone nvarchar(12))
 AS
@@ -125,6 +128,7 @@ BEGIN
 END
 GO
 
+--Candidate controller
 -- This SP is used to Get next prev question for Candidate
 CREATE OR ALTER PROC GetNextPrevQuestion(@examId int, @userId nvarchar(20), @token varchar(50), @seqNo int)
 AS
@@ -141,6 +145,7 @@ END
 
 GO
 
+--Candidate controller 
 -- This SP is used to Get options of question for Candidate
 CREATE OR ALTER PROC GetQuestionOptions(@examId int, @userId nvarchar(20), @token varchar(50), @seqNo int)
 AS
@@ -157,6 +162,7 @@ END
 
 GO
 
+--Candidate controller
 -- This SP is used to SubmitAnswer of question for Candidate
 CREATE OR ALTER PROC SubmitAnswers(@examId int, @userId nvarchar(20), @token varchar(50), @seqNo int, @selectedOptionIds varchar(100))
 AS
@@ -190,6 +196,7 @@ END
 
 GO
 
+--Candidate controller
 -- This SP is used to Calculate total obtained marks for Candidate
 CREATE OR ALTER PROC CalculateMarks(@examId int, @userId nvarchar(20), @token varchar(50))
 AS
@@ -224,8 +231,9 @@ GO
 -- Start Admin Module
 
 -- This SP is used to login screen for Admin
---EXEC GetAdminToken 'Test', 'Test'
-
+--EXEC GetAdminToken 'iprasad', 'test3'
+--select * from AdminLoginToken
+--Admin controller 
 CREATE OR ALTER PROC GetAdminToken
 (
    @userId nvarchar(20),
@@ -244,7 +252,7 @@ BEGIN
 		INSERT INTO AdminLoginToken (AdminLoginId, Token, LoginStartTime, LoginEndTime) values (@adminLoginId, @token, @dt, DATEADD(d, 1, @dt))
 	END	
 	
-	SELECT @token
+	SELECT @token AS Token, @dt As LoginStart, DATEADD(d, 1, @dt) As LoginEnd
 END
 
 GO
@@ -252,6 +260,7 @@ GO
 
 -- This SP is used to create login credential for Candidate
 --EXEC AddCadidateLogins 'prasad.indra@gmail.com', 'test', 5, 3, '1,2,4','2020/12/31', '2021/12/31'
+--Admin controller 
 CREATE OR ALTER PROC AddCadidateLogins
 (
   @requestedPersonEmail nvarchar(250), 
@@ -312,7 +321,7 @@ END
 GO
 
 
-
+--Admin controller 
 -- This SP is used to get list of Candidate for download or send email
 CREATE OR ALTER PROC DownloadCadidateLoginIds(@candidateLoginRequestId int)
 AS
@@ -329,7 +338,7 @@ END
 
 GO
 
-
+--Admin controller 
 -- This SP is used to get list of Candidate for download or send email
 CREATE OR ALTER PROC SearchRequests(@search nvarchar(250))
 AS
@@ -342,6 +351,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to get list of Candidate for download or send email
 CREATE OR ALTER PROC GetListRequestsByRequestedEmail(@requestedPersonEmail nvarchar(250))
 AS
@@ -354,6 +364,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to get list of Candidate for download or send email
 CREATE OR ALTER PROC DeleteRequestedLogin(@candidateLoginRequestId nvarchar(250), @adminUserId nvarchar(20))
 AS
@@ -385,6 +396,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to Add or Edit exam
 CREATE OR ALTER PROC AddEditExam(@examId int, @examName nvarchar(1000), 
 				@totalMarks int, @passingPercentage int, @instructions nvarchar(4000), @duration int, @adminUserId nvarchar(20))
@@ -407,7 +419,7 @@ END
 
 GO
 
-
+--Admin controller 
 -- This SP is used to delete exam
 CREATE OR ALTER PROC DeleteExam(@examId int, @adminUserId nvarchar(20))
 AS
@@ -420,6 +432,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to exam detail
 CREATE OR ALTER PROC GetExam(@examId int)
 AS
@@ -429,6 +442,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to exam detail
 CREATE OR ALTER PROC SearchExams(@search nvarchar(250))
 AS
@@ -438,6 +452,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to Add or Edit question
 CREATE OR ALTER PROC AddEditQuestion(@questionId int, @questionTypeId int, @question nvarchar(1000), @noofOption int,
 		@markValue int, @complexityLevelId int, @examIds varchar(1000), @options varchar(8000), @adminUserId nvarchar(20))
@@ -511,7 +526,7 @@ END
 
 GO
 
-
+--Admin controller 
 -- This SP is used to delete question
 CREATE OR ALTER PROC DeleteQuestion(@questionId int, @adminUserId nvarchar(20))
 AS
@@ -524,6 +539,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to question detail
 CREATE OR ALTER PROC GetQuestion(@questionId int)
 AS
@@ -534,6 +550,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to question detail
 CREATE OR ALTER PROC GetQuestionOptions(@questionId int)
 AS
@@ -544,6 +561,7 @@ END
 
 GO
 
+--Admin controller 
 -- This SP is used to exam detail
 CREATE OR ALTER PROC SearchQuestions(@search nvarchar(250))
 AS
